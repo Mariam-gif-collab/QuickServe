@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QuickServe | Local Services</title>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="brand-logo">Quick<span>Serve</span></a>
+    <div id="nav-right" class="nav-links"></div>
+  </nav>
+
+  <main class="container">
+    <section style="text-align: center; margin-bottom: 3rem;">
+      <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">Find Local Experts in Seconds</h1>
+      <div class="hero-actions" style="justify-content: center; margin-top: 1.25rem; margin-bottom: 1.5rem;">
+        <a href="login.html?mode=login" class="btn-secondary">Login</a>
+        <a href="login.html?mode=register" class="btn-primary">Sign Up</a>
+      </div>
+      <select id="category-filter" class="form-control" style="max-width: 300px; margin: 0 auto;">
+        <option value="all">All Categories</option>
+        <option value="Plumbing">Plumbing</option>
+        <option value="Electrical">Electrical</option>
+        <option value="Cleaning">Cleaning</option>
+      </select>
+    </section>
+
+    <div class="providers-grid" id="providers-grid"></div>
+  </main>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>AOS.init();</script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

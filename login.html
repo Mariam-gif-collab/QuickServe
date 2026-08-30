@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QuickServe | Sign In</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container" style="max-width: 450px; margin-top: 4rem;">
+    <h2 id="auth-title" style="margin-bottom: 1.5rem; text-align: center;">Sign In</h2>
+    <form id="auth-form">
+      <div class="form-group" id="group-fullname" style="display:none;">
+        <label>Full Name</label>
+        <input type="text" id="auth-name" class="form-control">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="auth-email" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="auth-pass" class="form-control" required>
+      </div>
+      <div class="form-group" id="group-role" style="display:none;">
+        <label>Role</label>
+        <select id="auth-role" class="form-control">
+          <option value="customer">Customer</option>
+          <option value="provider">Service Provider</option>
+        </select>
+      </div>
+
+      <div id="provider-fields" style="display:none;">
+        <div class="form-group">
+          <label>Category</label>
+          <input type="text" id="provider-category" class="form-control" placeholder="Plumbing">
+        </div>
+        <div class="form-group">
+          <label>Hourly Rate ($)</label>
+          <input type="number" id="provider-rate" class="form-control" placeholder="50">
+        </div>
+        <div class="form-group">
+          <label>Profile Image</label>
+          <input type="file" id="provider-image" class="form-control">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Submit</button>
+    </form>
+    <p style="text-align: center; margin-top: 1rem;">
+      <a href="#" id="toggle-mode" style="color: var(--accent);">Need an account? Register</a>
+    </p>
+  </div>
+
+  <script type="module">
+    import { registerUser, loginUser } from "./js/auth.js";
+    import { uploadImage } from "./js/cloudinary.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const modeFromUrl = params.get("mode");
+    let isRegister = modeFromUrl === "register";
+    const toggleBtn = document.getElementById("toggle-mode");
+    const authTitle = document.getElementById("auth-title");
+
+    function applyMode(nextMode) {
+      isRegister = nextMode === "register";
+      const url = new URL(window.location.href);
+      url.searchParams.set("mode", isRegister ? "register" : "login");
+      history.replaceState({}, "", url);
+
+      const roleField = document.getElementById("auth-role");
+      const fullnameGroup = document.getElementById("group-fullname");
+      const roleGroup = document.getElementById("group-role");
+      const providerFields = document.getElementById("provider-fields");
+
+      fullnameGroup.style.display = isRegister ? "block" : "none";
+      roleGroup.style.display = isRegister ? "block" : "none";
+      providerFields.style.display = isRegister && roleField.value === "provider" ? "block" : "none";
+      toggleBtn.innerText = isRegister ? "Already have an account? Sign In" : "Need an account? Register";
+      authTitle.innerText = isRegister ? "Create Account" : "Sign In";
+    }
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      applyMode(isRegister ? "login" : "register");
+    });
+
+    document.getElementById("auth-role").addEventListener("change", (e) => {
+      document.getElementById("provider-fields").style.display = isRegister && e.target.value === "provider" ? "block" : "none";
+    });
+
+    applyMode(modeFromUrl === "register" ? "register" : "login");
+
+    document.getElementById("auth-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("auth-email").value.trim();
+      const pass = document.getElementById("auth-pass").value.trim();
+
+      if (!email || !pass) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      try {
+        if (isRegister) {
+          const name = document.getElementById("auth-name").value.trim();
+          const role = document.getElementById("auth-role").value;
+
+          if (!name) {
+            alert("Please enter your full name.");
+            return;
+          }
+
+          let pData = null;
+
+          if (role === "provider") {
+            const fileInput = document.getElementById("provider-image");
+            const imageUrl = await uploadImage(fileInput);
+            pData = {
+              category: document.getElementById("provider-category").value,
+              location: "Downtown",
+              experience: 3,
+              hourlyRate: document.getElementById("provider-rate").value,
+              imageUrl
+            };
+          }
+
+          await registerUser(email, pass, name, role, pData);
+        } else {
+          await loginUser(email, pass);
+        }
+
+        window.location.href = "index.html";
+      } catch (err) {
+        alert(err.message || "Authentication failed.");
+      }
+    });
+  </script>
+</body>
+</html>

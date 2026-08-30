@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QuickServe | Provider Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar"><a href="index.html" class="brand-logo">Quick<span>Serve</span></a></nav>
+
+  <main class="container">
+    <h2>Provider Dashboard</h2>
+    <p>Manage incoming requests and update job progress</p>
+
+    <div class="data-table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Customer</th>
+            <th>Schedule</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="provider-bookings-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module" src="js/provider-dash.js"></script>
+</body>
+</html>
