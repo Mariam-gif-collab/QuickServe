@@ -1,31 +1,4 @@
-// import { db, auth } from "./firebase-config.js";
-// import { collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-// export function listenToProviderBookings(providerId) {
-//   const q = query(collection(db, "bookings"), where("providerId", "==", providerId));
-  
-//   onSnapshot(q, (snapshot) => {
-//     const bookings = snapshot.docs.map(doc => ({ docId: doc.id, ...doc.data() }));
-//     renderProviderBookings(bookings);
-//   });
-// }
-
-// async function updateStatus(docId, currentStatus, newStatus) {
-//   // Business Rule Enforcements
-//   if (currentStatus === "rejected") {
-//     alert("Rejected bookings cannot be modified.");
-//     return;
-//   }
-//   if (currentStatus === "completed") {
-//     alert("Completed bookings cannot be edited.");
-//     return;
-//   }
-
-//   await updateDoc(doc(db, "bookings", docId), {
-//     status: newStatus,
-//     updatedAt: new Date().toISOString()
-//   });
-// }
 import { db, auth } from "./firebase-config.js";
 import { collection, query, where, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";

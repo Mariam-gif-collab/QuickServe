@@ -9,27 +9,7 @@ export async function uploadImage(fileInput) {
   formData.append("file", file);
   formData.append("upload_preset", UPLOAD_PRESET);
 
-  try {
-    const response = await fetch(CLOUDINARY_URL, {
-      method: "POST",
-      body: formData
-    });
-    const data = await response.json();
-    return data.secure_url;
-  } catch (error) {
-    console.error("Cloudinary upload failed:", error);
-    throw error;
-  }
+  const response = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
+  const data = await response.json();
+  return data.secure_url;
 }
-// export async function uploadImage(fileInput) {
-//   const file = fileInput.files[0];
-//   if (!file) return null;
-
-//   const formData = new FormData();
-//   formData.append("file", file);
-//   formData.append("upload_preset", UPLOAD_PRESET);
-
-//   const response = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
-//   const data = await response.json();
-//   return data.secure_url;
-// }
